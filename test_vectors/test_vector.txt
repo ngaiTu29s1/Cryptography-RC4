@@ -1,62 +1,100 @@
-# Test vectors for RC4 implementation
-# Format: field=value, separated by --- for each test case
-# RC4 only uses key (no IV needed like Sosemanuk)
-# Generated automatically from RC4 implementation
+# Test vectors for RC4 - Cryptography-RC4 Project
+# 
+# Format:
+#   plaintext=<van ban goc>
+#   key=<khoa ma hoa>
+#   keystream=<keystream sinh ra, dang hex, cach nhau boi space>
+#   expected_ciphertext=<ket qua ma hoa mong doi, dang hex>
+#   expected_recovered=<ket qua giai ma phai giong plaintext>
+#   --- (phan cach giua cac test case)
+#
+# Total: 10 test cases
+# Test case #1 la de bai yeu cau: "Hanoi University of Science and Technology"
 
+# ============================================================
+# TEST CASE #1 - De bai yeu cau
+# ============================================================
 plaintext=Hanoi University of Science and Technology
 key=HUST2024
 keystream=17 1A B9 C3 02 6D A8 B4 58 8B 37 CC 9A A3 E0 A8 06 9F 01 F8 0B 08 29 99 BE D7 A2 34 9C C2 9B 0E 8D C5 B8 BD 43 14 B4 7A B7 67
 expected_ciphertext=5F 7B D7 AC 6B 4D FD DA 31 FD 52 BE E9 CA 94 D1 26 F0 67 D8 58 6B 40 FC D0 B4 C7 14 FD AC FF 2E D9 A0 DB D5 2D 7B D8 15 D0 1E
 expected_recovered=Hanoi University of Science and Technology
 ---
+# ============================================================
+# TEST CASE #2 - Short message
+# ============================================================
 plaintext=Hello World
 key=Key
 keystream=EB 9F 77 81 B7 34 CA 72 A7 19 4A
 expected_ciphertext=A3 FA 1B ED D8 14 9D 1D D5 75 2E
 expected_recovered=Hello World
 ---
+# ============================================================
+# TEST CASE #3
+# ============================================================
 plaintext=Test RC4
 key=SecretKey
 keystream=14 B8 3C 47 DF 72 1E A2
 expected_ciphertext=40 DD 4F 33 FF 20 5D 96
 expected_recovered=Test RC4
 ---
+# ============================================================
+# TEST CASE #4
+# ============================================================
 plaintext=Cryptography
 key=Pass123
 keystream=D1 61 11 49 56 0F 00 54 A7 83 46 AC
 expected_ciphertext=92 13 68 39 22 60 67 26 C6 F3 2E D5
 expected_recovered=Cryptography
 ---
+# ============================================================
+# TEST CASE #5 - Very short
+# ============================================================
 plaintext=Short
 key=ABC
 keystream=CE 24 5E 93 4F
 expected_ciphertext=9D 4C 31 E1 3B
 expected_recovered=Short
 ---
+# ============================================================
+# TEST CASE #6
+# ============================================================
 plaintext=Simple Test Message
 key=MyKey
 keystream=2D 05 CB 47 80 8E 1F BB 77 5E F7 39 36 03 60 CE E4 08 9B
 expected_ciphertext=7E 6C A6 37 EC EB 3F EF 12 2D 83 19 7B 66 13 BD 85 6F FE
 expected_recovered=Simple Test Message
 ---
+# ============================================================
+# TEST CASE #7
+# ============================================================
 plaintext=RC4 Stream Cipher
 key=TestKey2024
 keystream=86 C8 20 77 C6 E3 7F 50 E3 D7 FA 0D BB C0 77 BF 59
 expected_ciphertext=D4 8B 14 57 95 97 0D 35 82 BA DA 4E D2 B0 1F DA 2B
 expected_recovered=RC4 Stream Cipher
 ---
+# ============================================================
+# TEST CASE #8 - Long message
+# ============================================================
 plaintext=Long message for testing RC4 encryption and decryption
 key=LongSecretKey123
 keystream=0E 46 E2 15 D2 93 61 90 A1 2E 24 56 80 6E E9 6A 15 C9 54 DE ED B7 77 14 FB F9 0F FF 7F B4 37 B7 3C 11 B6 6A 3B 2A 1C A9 2D 4D 51 72 41 6A 1E 56 8F 14 5B 20 5C 14
 expected_ciphertext=42 29 8C 72 F2 FE 04 E3 D2 4F 43 33 A0 08 86 18 35 BD 31 AD 99 DE 19 73 DB AB 4C CB 5F D1 59 D4 4E 68 C6 1E 52 45 72 89 4C 23 35 52 25 0F 7D 24 F6 64 2F 49 33 7A
 expected_recovered=Long message for testing RC4 encryption and decryption
 ---
+# ============================================================
+# TEST CASE #9 - Alphabet
+# ============================================================
 plaintext=ABCDEFGHIJKLMNOPQRSTUVWXYZ
 key=Alphabet
 keystream=5E 6B AE BC 30 C1 A9 F8 7F 49 05 6A 77 17 D8 70 8F 35 10 72 C7 5D 2C 49 4F 8A
 expected_ciphertext=1F 29 ED F8 75 87 EE B0 36 03 4E 26 3A 59 97 20 DE 67 43 26 92 0B 7B 11 16 D0
 expected_recovered=ABCDEFGHIJKLMNOPQRSTUVWXYZ
 ---
+# ============================================================
+# TEST CASE #10 - Numbers
+# ============================================================
 plaintext=12345
 key=Num
 keystream=50 32 28 F2 5B
