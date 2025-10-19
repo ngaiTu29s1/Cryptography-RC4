@@ -1,47 +1,113 @@
 #include "include/rc4.h"
+#include "include/test_vector_parser.h"
 #include <iostream>
+#include <iomanip>
 
-int main() {
-    // Khai báo plaintext và key
-    std::string plaintext = "Hanoi University of Science and Technology";
-    std::string key = "HUST2024";
+void runTestCase(int testNum, const TestCase& test) {
+    std::cout << "\n================================================\n";
+    std::cout << "TEST CASE #" << testNum << "\n";
+    std::cout << "================================================\n";
+    std::cout << "Plaintext: " << test.plaintext << "\n";
+    std::cout << "Key:       " << test.key << "\n";
+    std::cout << "Length:    " << test.plaintext.length() << " bytes\n";
     
-    std::cout << "=============================================\n";
-    std::cout << "RC4 STREAM CIPHER IMPLEMENTATION\n";
-    std::cout << "=============================================\n";
+    // Ma hoa
+    std::string ciphertext = RC4_encrypt(test.plaintext, test.key, false);
+    std::vector<unsigned char> actual_ciphertext = stringToBytes(ciphertext);
     
-    // Mã hóa với verbose mode
-    std::string ciphertext = RC4_encrypt(plaintext, key, true);
+    // Kiem tra ciphertext
+    std::cout << "\n[1] Ciphertext Check:\n";
+    std::cout << "    Expected: ";
+    printBytesHex(test.expected_ciphertext);
+    std::cout << "\n    Actual:   ";
+    printBytesHex(actual_ciphertext);
     
-    // Giải mã với verbose mode
-    std::string decrypted = RC4_decrypt(ciphertext, key, true);
+    bool ciphertextMatch = compareBytes(actual_ciphertext, test.expected_ciphertext);
+    std::cout << "\n    Result:   " << (ciphertextMatch ? "[PASS]" : "[FAIL]") << "\n";
     
-    // Kiểm tra kết quả
-    std::cout << "\n=============================================\n";
-    std::cout << "VERIFICATION\n";
-    std::cout << "=============================================\n";
-    std::cout << "Original plaintext:  " << plaintext << "\n";
-    std::cout << "Decrypted plaintext: " << decrypted << "\n";
+    // Giai ma
+    std::string decrypted = RC4_decrypt(ciphertext, test.key, false);
     
-    if (plaintext == decrypted) {
-        std::cout << "\n✓ SUCCESS: Decryption matches original plaintext!\n";
+    // Kiem tra decryption
+    std::cout << "\n[2] Decryption Check:\n";
+    std::cout << "    Expected: " << test.expected_recovered << "\n";
+    std::cout << "    Actual:   " << decrypted << "\n";
+    
+    bool decryptionMatch = (decrypted == test.expected_recovered);
+    std::cout << "    Result:   " << (decryptionMatch ? "[PASS]" : "[FAIL]") << "\n";
+    
+    // Kiem tra plaintext goc
+    bool plaintextMatch = (decrypted == test.plaintext);
+    std::cout << "\n[3] Original Match:  " << (plaintextMatch ? "[PASS]" : "[FAIL]") << "\n";
+    
+    // Tong ket
+    if (ciphertextMatch && decryptionMatch && plaintextMatch) {
+        std::cout << "\n>>> TEST CASE #" << testNum << ": PASSED <<<\n";
     } else {
-        std::cout << "\n✗ ERROR: Decryption does not match original plaintext!\n";
+        std::cout << "\n>>> TEST CASE #" << testNum << ": FAILED <<<\n";
+    }
+}
+
+int main(int argc, char* argv[]) {
+    std::string testVectorFile = "test_vectors/test_vector.txt";
+    
+    // Cho phep truyen file path qua argument
+    if (argc > 1) {
+        testVectorFile = argv[1];
     }
     
-    std::cout << "=============================================\n";
+    std::cout << "================================================\n";
+    std::cout << "   RC4 STREAM CIPHER - TEST RUNNER\n";
+    std::cout << "================================================\n";
+    std::cout << "Loading test vectors from: " << testVectorFile << "\n";
     
-    // Demo thêm với key khác để thấy sự khác biệt
-    std::cout << "\n\n=============================================\n";
-    std::cout << "DEMO WITH DIFFERENT KEY\n";
-    std::cout << "=============================================\n";
+    // Doc test vectors tu file
+    std::vector<TestCase> testCases = parseTestVectors(testVectorFile);
     
-    std::string wrong_key = "WRONG123";
-    std::cout << "Trying to decrypt with wrong key: " << wrong_key << "\n";
-    std::string wrong_decrypted = RC4_decrypt(ciphertext, wrong_key, false);
-    std::cout << "Result: " << wrong_decrypted << "\n";
-    std::cout << "(Shows garbled text because key is incorrect)\n";
-    std::cout << "=============================================\n";
+    if (testCases.empty()) {
+        std::cerr << "\n[ERROR] No test cases found or file cannot be read!\n";
+        return 1;
+    }
     
-    return 0;
+    std::cout << "Found " << testCases.size() << " test case(s)\n";
+    
+    // Chay tat ca test cases
+    int passedCount = 0;
+    int failedCount = 0;
+    
+    for (size_t i = 0; i < testCases.size(); i++) {
+        runTestCase(i + 1, testCases[i]);
+        
+        // Kiem tra ket qua
+        std::string ciphertext = RC4_encrypt(testCases[i].plaintext, testCases[i].key, false);
+        std::vector<unsigned char> actual = stringToBytes(ciphertext);
+        std::string decrypted = RC4_decrypt(ciphertext, testCases[i].key, false);
+        
+        if (compareBytes(actual, testCases[i].expected_ciphertext) && 
+            decrypted == testCases[i].expected_recovered &&
+            decrypted == testCases[i].plaintext) {
+            passedCount++;
+        } else {
+            failedCount++;
+        }
+    }
+    
+    // Tong ket
+    std::cout << "\n================================================\n";
+    std::cout << "   FINAL SUMMARY\n";
+    std::cout << "================================================\n";
+    std::cout << "Total tests:  " << testCases.size() << "\n";
+    std::cout << "Passed:       " << passedCount << "\n";
+    std::cout << "Failed:       " << failedCount << "\n";
+    std::cout << "Success rate: " << std::fixed << std::setprecision(1) 
+              << (100.0 * passedCount / testCases.size()) << "%\n";
+    std::cout << "================================================\n";
+    
+    if (failedCount == 0) {
+        std::cout << "\nALL TEST CASES PASSED!\n\n";
+        return 0;
+    } else {
+        std::cout << "\nSOME TEST CASES FAILED!\n\n";
+        return 1;
+    }
 }
