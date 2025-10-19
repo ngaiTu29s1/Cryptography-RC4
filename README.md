@@ -17,14 +17,21 @@ RC4 là một thuật toán mã hóa dòng (stream cipher) được thiết kế
 ```
 Cryptography-RC4/
 ├── include/
-│   ├── rc4_utils.h    # Các hàm tiện ích (swap, print, init S-box)
-│   ├── ksa.h          # Key Scheduling Algorithm
-│   ├── prga.h         # Pseudo-Random Generation Algorithm
-│   └── rc4.h          # Hàm encrypt/decrypt chính
+│   ├── rc4_utils.h          # Các hàm tiện ích (swap, print, init S-box)
+│   ├── ksa.h                # Key Scheduling Algorithm
+│   ├── prga.h               # Pseudo-Random Generation Algorithm
+│   ├── rc4.h                # Hàm encrypt/decrypt chính
+│   └── test_vector_parser.h # Parser cho file test vectors
 ├── src/
-│   └── main.cpp       # Chương trình chính
-├── README.md          # File này
-└── .gitignore        # Git ignore file
+│   ├── main.cpp                  # Demo chương trình chính
+│   ├── test_runner.cpp           # Chạy test tự động từ file
+│   ├── generate_test_vectors.cpp # Tool tạo test vectors
+│   └── simple_test.cpp           # Test đơn giản
+├── test_vectors/
+│   └── test_vector.txt      # File chứa 10 test cases
+├── README.md                # File này
+├── QUICKSTART.md            # Hướng dẫn nhanh
+└── .gitignore              # Git ignore file
 ```
 
 ## 🔧 Cách biên dịch và chạy
@@ -36,21 +43,37 @@ Cryptography-RC4/
 ### Biên dịch trên Windows (PowerShell):
 
 ```powershell
-# Sử dụng g++ (MinGW)
+# Demo chương trình chính (verbose mode)
 g++ -std=c++11 -I. src/main.cpp -o rc4.exe
-
-# Chạy chương trình
 ./rc4.exe
+
+# Chạy test runner với test vectors
+g++ -std=c++11 -I. src/test_runner.cpp -o test_runner.exe
+./test_runner.exe
+
+# Test đơn giản (compact output)
+g++ -std=c++11 -I. src/simple_test.cpp -o simple_test.exe
+./simple_test.exe
+
+# Generate test vectors mới
+g++ -std=c++11 -I. src/generate_test_vectors.cpp -o generate_test_vectors.exe
+./generate_test_vectors.exe
 ```
 
 ### Biên dịch trên Linux/MacOS:
 
 ```bash
-# Sử dụng g++
+# Demo chương trình chính
 g++ -std=c++11 -I. src/main.cpp -o rc4
-
-# Chạy chương trình
 ./rc4
+
+# Test runner
+g++ -std=c++11 -I. src/test_runner.cpp -o test_runner
+./test_runner
+
+# Simple test
+g++ -std=c++11 -I. src/simple_test.cpp -o simple_test
+./simple_test
 ```
 
 ### Biên dịch với MSVC (Visual Studio):
@@ -60,13 +83,69 @@ cl /EHsc /I. src\main.cpp /Fe:rc4.exe
 rc4.exe
 ```
 
-## 📊 Test Vector
+## 🧪 Test Vectors
 
-### Input:
+Dự án sử dụng file test vectors để kiểm tra tính đúng đắn của implementation.
+
+### Format file test vectors
+
+File `test_vectors/test_vector.txt` chứa các test cases với format:
+
+```
+plaintext=<văn bản gốc>
+key=<khóa>
+keystream=<keystream dạng hex>
+expected_ciphertext=<ciphertext mong đợi dạng hex>
+expected_recovered=<plaintext sau khi giải mã>
+---
+```
+
+### Chạy test tự động
+
+```bash
+# Biên dịch test runner
+g++ -std=c++11 -I. src/test_runner.cpp -o test_runner
+# hoặc trên Windows:
+g++ -std=c++11 -I. src/test_runner.cpp -o test_runner.exe
+
+# Chạy tất cả test cases
+./test_runner        # Linux/MacOS
+./test_runner.exe    # Windows
+```
+
+Kết quả mong đợi:
+```
+Found 10 test case(s)
+...
+Total tests:  10
+Passed:       10 ✓
+Failed:       0 ✗
+Success rate: 100.0%
+
+🎉 ALL TEST CASES PASSED! 🎉
+```
+
+### Tạo test vectors mới
+
+Nếu bạn muốn tạo test vectors mới từ implementation:
+
+```bash
+g++ -std=c++11 -I. src/generate_test_vectors.cpp -o generate_test_vectors
+./generate_test_vectors
+```
+
+Tool này sẽ:
+1. Chạy RC4 với các plaintext và key khác nhau
+2. Sinh keystream và ciphertext
+3. Lưu vào file `test_vectors/test_vector.txt`
+
+## 📊 Ví dụ Test Vector
+
+### Test Case #1 - Đề bài yêu cầu:
 - **Plaintext**: `Hanoi University of Science and Technology`
 - **Key**: `HUST2024`
-- **Plaintext length**: 43 bytes
-- **Key length**: 8 bytes
+- **Keystream** (hex): `17 1A B9 C3 02 6D A8 B4 58 8B 37 CC 9A A3 E0 A8 06 9F 01 F8 0B 08 29 99 BE D7 A2 34 9C C2 9B 0E 8D C5 B8 BD 43 14 B4 7A B7 67`
+- **Ciphertext** (hex): `5F 7B D7 AC 6B 4D FD DA 31 FD 52 BE E9 CA 94 D1 26 F0 67 D8 58 6B 40 FC D0 B4 C7 14 FD AC FF 2E D9 A0 DB D5 2D 7B D8 15 D0 1E`
 
 ### Các bước thuật toán:
 

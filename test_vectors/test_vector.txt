@@ -1,60 +1,65 @@
-# Test vectors for Sosemanuk implementation
+# Test vectors for RC4 implementation
 # Format: field=value, separated by --- for each test case
-# Generated from our educational implementation
+# RC4 only uses key (no IV needed like Sosemanuk)
+# Generated automatically from RC4 implementation
 
-plaintext=Hello, World!
-key=00 11 22 33 44 55 66 77 88 99 AA BB CC DD EE FF
-iv=88 99 AA BB CC DD EE FF 00 11 22 33 44 55 66 77
-keystream=D3 F6 E3 E7 1F 4B 69 CE ED 25 F2 03 BA
-expected_ciphertext=9B 93 8F 8B 70 67 49 99 82 57 9E 67 9B
-expected_recovered=Hello, World!
----
-plaintext=Test Vector 2
-key=AA BB CC DD EE FF 00 11 22 33 44 55 66 77 88 99
-iv=00 11 22 33 44 55 66 77 88 99 AA BB CC DD EE FF
-keystream=D1 0C A4 E2 C3 B6 62 84 EB 34 A0 08 FC
-expected_ciphertext=85 69 D7 96 E3 E0 07 E7 9F 5B D2 28 CE
-expected_recovered=Test Vector 2
----
-plaintext=Cryptography Assignment
-key=12 34 56 78 9A BC DE F0 FE DC BA 98 76 54 32 10
-iv=AB CD EF 01 23 45 67 89 9F ED CB A7 65 43 21 0F
-keystream=07 D8 BF E8 86 86 4C E3 73 D7 83 D2 DA DD 94 42 5F 0D C2 AC 0C AA 16
-expected_ciphertext=44 AA C6 98 F2 E9 2B 91 12 A7 EB AB FA 9C E7 31 36 6A AC C1 69 C4 62
-expected_recovered=Cryptography Assignment
+plaintext=Hanoi University of Science and Technology
+key=HUST2024
+keystream=17 1A B9 C3 02 6D A8 B4 58 8B 37 CC 9A A3 E0 A8 06 9F 01 F8 0B 08 29 99 BE D7 A2 34 9C C2 9B 0E 8D C5 B8 BD 43 14 B4 7A B7 67
+expected_ciphertext=5F 7B D7 AC 6B 4D FD DA 31 FD 52 BE E9 CA 94 D1 26 F0 67 D8 58 6B 40 FC D0 B4 C7 14 FD AC FF 2E D9 A0 DB D5 2D 7B D8 15 D0 1E
+expected_recovered=Hanoi University of Science and Technology
 ---
 plaintext=Hello World
-key=00 11 22 33 44 55 66 77 88 99 AA BB CC DD EE FF
-iv=FF EE DD CC BB AA 99 88 77 66 55 44 33 22 11 00
-keystream=9D C7 5A C6 B5 C9 66 0A E7 B0 7C
-expected_ciphertext=D5 A2 36 AA DA E9 31 65 95 DC 18
+key=Key
+keystream=EB 9F 77 81 B7 34 CA 72 A7 19 4A
+expected_ciphertext=A3 FA 1B ED D8 14 9D 1D D5 75 2E
 expected_recovered=Hello World
 ---
-plaintext=Security Test
-key=12 34 56 78 9A BC DE F0 FE DC BA 98 76 54 32 10
-iv=01 23 45 67 89 AB CD EF EF CD AB 89 67 45 23 01
-keystream=DC 0F 7A 15 E1 7C 4B DE AA 36 3E CC 78
-expected_ciphertext=8F 6A 19 60 93 15 3F A7 8A 62 5B BF 0C
-expected_recovered=Security Test
+plaintext=Test RC4
+key=SecretKey
+keystream=14 B8 3C 47 DF 72 1E A2
+expected_ciphertext=40 DD 4F 33 FF 20 5D 96
+expected_recovered=Test RC4
 ---
 plaintext=Cryptography
-key=AA BB CC DD EE FF 00 11 22 33 44 55 66 77 88 99
-iv=99 88 77 66 55 44 33 22 11 00 FF EE DD CC BB AA
-keystream=86 97 AD 66 D4 FA B7 E6 1B 6C 55 52
-expected_ciphertext=C5 E5 D4 16 A0 95 D0 94 7A 1C 3D 2B
+key=Pass123
+keystream=D1 61 11 49 56 0F 00 54 A7 83 46 AC
+expected_ciphertext=92 13 68 39 22 60 67 26 C6 F3 2E D5
 expected_recovered=Cryptography
 ---
 plaintext=Short
-key=FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF FF
-iv=00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-keystream=91 40 59 9C 77
-expected_ciphertext=C2 28 36 EE 03
+key=ABC
+keystream=CE 24 5E 93 4F
+expected_ciphertext=9D 4C 31 E1 3B
 expected_recovered=Short
 ---
-plaintext=Long message for testing purposes
-key=A1 B2 C3 D4 E5 F6 07 18 29 3A 4B 5C 6D 7E 8F 90
-iv=90 8F 7E 6D 5C 4B 3A 29 18 07 F6 E5 D4 C3 B2 A1
-keystream=0A 5C 2A 57 F6 1A DE 36 53 8B 36 EE 66 82 1F 28 1B 2F 0B A0 B3 D6 E8 1E 6B 2A 03 F3 AA 2A 77 14 B5
-expected_ciphertext=46 33 44 30 D6 77 BB 45 20 EA 51 8B 46 E4 70 5A 3B 5B 6E D3 C7 BF 86 79 4B 5A 76 81 DA 45 04 71 C6
-expected_recovered=Long message for testing purposes
+plaintext=Simple Test Message
+key=MyKey
+keystream=2D 05 CB 47 80 8E 1F BB 77 5E F7 39 36 03 60 CE E4 08 9B
+expected_ciphertext=7E 6C A6 37 EC EB 3F EF 12 2D 83 19 7B 66 13 BD 85 6F FE
+expected_recovered=Simple Test Message
+---
+plaintext=RC4 Stream Cipher
+key=TestKey2024
+keystream=86 C8 20 77 C6 E3 7F 50 E3 D7 FA 0D BB C0 77 BF 59
+expected_ciphertext=D4 8B 14 57 95 97 0D 35 82 BA DA 4E D2 B0 1F DA 2B
+expected_recovered=RC4 Stream Cipher
+---
+plaintext=Long message for testing RC4 encryption and decryption
+key=LongSecretKey123
+keystream=0E 46 E2 15 D2 93 61 90 A1 2E 24 56 80 6E E9 6A 15 C9 54 DE ED B7 77 14 FB F9 0F FF 7F B4 37 B7 3C 11 B6 6A 3B 2A 1C A9 2D 4D 51 72 41 6A 1E 56 8F 14 5B 20 5C 14
+expected_ciphertext=42 29 8C 72 F2 FE 04 E3 D2 4F 43 33 A0 08 86 18 35 BD 31 AD 99 DE 19 73 DB AB 4C CB 5F D1 59 D4 4E 68 C6 1E 52 45 72 89 4C 23 35 52 25 0F 7D 24 F6 64 2F 49 33 7A
+expected_recovered=Long message for testing RC4 encryption and decryption
+---
+plaintext=ABCDEFGHIJKLMNOPQRSTUVWXYZ
+key=Alphabet
+keystream=5E 6B AE BC 30 C1 A9 F8 7F 49 05 6A 77 17 D8 70 8F 35 10 72 C7 5D 2C 49 4F 8A
+expected_ciphertext=1F 29 ED F8 75 87 EE B0 36 03 4E 26 3A 59 97 20 DE 67 43 26 92 0B 7B 11 16 D0
+expected_recovered=ABCDEFGHIJKLMNOPQRSTUVWXYZ
+---
+plaintext=12345
+key=Num
+keystream=50 32 28 F2 5B
+expected_ciphertext=61 00 1B C6 6E
+expected_recovered=12345
 ---
