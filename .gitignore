@@ -1,0 +1,57 @@
+# Compiled Object files
+*.o
+*.obj
+*.exe
+*.out
+*.app
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Compiled Static libraries
+*.a
+*.lib
+
+# Executables
+rc4
+rc4.exe
+*.exe
+
+# Visual Studio files
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build directories
+build/
+bin/
+obj/
+Debug/
+Release/
+x64/
+x86/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Temporary files
+*.tmp
+*.temp
+*.log
